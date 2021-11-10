@@ -1,0 +1,154 @@
+﻿@model VendaModel
+
+<h2>Registrar Venda</h2>
+
+<form asp-controller="Venda" asp-action="Registrar">
+    <input type="hidden" asp-for="id" value="@try{@ViewBag.Venda.id} catch{ } " />
+
+    <div class="form-group">
+        <label>Cliente</label>
+        <select asp-for="cliente_id" class="form-control">
+            @{
+                foreach (var item in (List<ClienteModel>)ViewBag.ListaClientes)
+                {
+                    <option value="@item.id">@item.nome</option>
+                }
+            }
+        </select>
+    </div>
+
+    @*<div class="form-group">
+            <label>Vendedor</label>
+            <select asp-for="vendedor_id" class="form-control">
+                @{
+                    foreach (var item in (List<VendedorModel>)ViewBag.ListaVendedores)
+                    {
+                        <option value="@item.id">@item.nome</option>
+                    }
+                }
+            </select>
+        </div>
+    *@
+    <label>Produtos</label>
+    <br />
+    <div class="container" style="margin-left: -15px">
+        <div class="row">
+            <div class="col-lg-9">
+                <select class="form-control" id="sltProdutos">
+                    @{
+                        foreach (var item in (List<ProdutoModel>)ViewBag.ListaProdutos)
+                        {
+                            <option value="@item.id">@item.nome  |  R$ @item.preco_unitario</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-lg-1">
+                <input type="text" class="form-control" value="1" id="txtQuantidade" style="margin-left: 15px" />
+            </div>
+            <div class="col">
+                <button type="button" class="btn btn-block btn-primary" onclick="adicionarProduto()" style="margin-left: 28px">Adicionar</button>
+            </div>
+        </div>
+    </div>
+    <br />
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <td style="font-weight: bolder">ID</td>
+                <td style="font-weight: bolder">Nome</td>
+                <td style="font-weight: bolder">Quantidade</td>
+                <td style="font-weight: bolder">Valor Unitário</td>
+                <td style="font-weight: bolder">Total</td>
+            </tr>
+        </thead>
+
+        <tbody id="listaProdutos"></tbody>
+    </table>
+    <br />
+    <div class="row" style="font-size: 30px">
+        <div class="col-lg-1.1" style="margin-left: 15px">TOTAL : R$</div>
+        <div class="col-lg-1" id="divTotal">0.00</div>
+    </div>
+
+    <!--representa o total-->
+    <input type="hidden" asp-for="total" id="txtTotal" />
+
+    <br /><br />
+
+    <textarea asp-for="listaProdutos" id="listaProdutosJSON" style="display: none"></textarea>
+
+    <button type="submit" class="btn btn-block btn-success">Registrar</button>
+    <button type="button" class="btn btn-block btn-primary" onclick="voltar()">Listagem de Vendas</button>
+</form>
+
+<script>
+    var itens = new Object();
+    itens.Produtos = new Array();
+
+    var codigoProduto = document.getElementById("sltProdutos");
+    var qtdeProduto = document.getElementById("txtQuantidade");
+    var listaProdutos = document.getElementById("listaProdutos");
+    var totalVenda = document.getElementById("divTotal");
+    var listaProdutosJSON = document.getElementById("listaProdutosJSON");
+    var txtTotal = document.getElementById("txtTotal");
+    var prodAdicionado = false;
+
+
+
+    function adicionarProduto() {
+
+        for (var i = 0; i < itens.Produtos.length; i++) {
+            if (codigoProduto.value == Object.values(itens.Produtos[i].codigoProduto)) {
+                prodAdicionado = true;
+                alert("ATENÇÃO! ESTE ITEM JÁ FOI SELECIONADO");
+                break;
+            } else {
+                prodAdicionado = false;
+
+            }
+        }
+
+        if (prodAdicionado == false) {
+
+            //armazena o conteudo da descrição do produto e separa os valores pelo '|'
+            var DescricaoPreco = codigoProduto.options[codigoProduto.selectedIndex].text;
+            var arrayDescricaoPreco = DescricaoPreco.split('| R$');
+            var total = (arrayDescricaoPreco[1].replace(",", ".") * qtdeProduto.value);
+            //o código abaixo trata o excesso de casas decimais, limitando para apenas 2
+            total = Math.round(total * 100) / 100;
+
+            itens.Produtos.push({
+                "codigoProduto": codigoProduto.value,
+                "descricaoProduto": arrayDescricaoPreco[0],
+                "qtdeProduto": qtdeProduto.value,
+                "precoUnitario": arrayDescricaoPreco[1],
+                "total": total
+
+            });
+
+
+            //faz com que o array itens.Produtos se torne um JSON
+            listaProdutosJSON.innerHTML = JSON.stringify(itens.Produtos)
+
+            var produto = "<tr>" +
+                "<td>" + codigoProduto.value + "</td>" +
+                "<td>" + arrayDescricaoPreco[0] + "</td>" +
+                "<td>" + qtdeProduto.value + "</td>" +
+                "<td> R$ " + arrayDescricaoPreco[1] + "</td>" +
+                "<td> R$ " + total + "</td> "
+            "</tr>";
+
+            listaProdutos.innerHTML += produto;
+            //codigo abaixo trata o excesso de casas decimais após a virgula
+            var totalGeral = Math.round((totalVenda.innerText * 1 + total) * 100) / 100;
+            totalVenda.innerHTML = totalGeral;
+            txtTotal.value = totalGeral.toString().replace(".", ",");
+        }
+    }
+    function voltar() {
+        window.location.href = '../Venda/Index';
+    }
+
+</script>

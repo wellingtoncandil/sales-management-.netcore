@@ -1,0 +1,58 @@
+﻿@model RelatorioModel
+<h2>Vendas por Periodo</h2>
+
+<form asp-controller="Relatorio" asp-action="Vendas">
+
+    <div class="form-group">
+        <label>Periodo</label>
+        <input asp-for="DataDe" type="date" class="form-control" />
+        <!--validação do preenchimento, caso não preenchido, aparecerá mensagem de erro-->
+    </div>
+    <div class="form-group">
+        <input asp-for="DataAte" type="date" class="form-control" />
+    </div>
+    <br />
+    <button type="submit" class="btn btn-block btn-success">Pesquisar</button>
+</form>
+
+<div style="overflow-y:scroll">
+    <table class="table table-dark" style="margin-top:auto">
+        <thread>
+            <tr>
+                <td></td>
+                <td></td>
+                <td>Nº da Venda</td>
+                <td>Data</td>
+                <td>Valor Total</td>
+                <td>Vendedor</td>
+                <td>Cliente</td>
+            </tr>
+        </thread>
+        <tbody id="tabela">
+
+            @{
+                try
+                {
+                    //ao percorrer a ViewBag.ListaClientes, é necessário fazer um cast dos dados para o tipo
+                    //List<ClienteModel>
+                    foreach (var item in (List<VendaModel>)ViewBag.ListaVendas)
+                    {
+                        <tr>
+                            <!--onclick chama a função js passando o paramentro item.id-->
+                            <td><button type="button" class="btn btn-warning" onclick="Editar(@item.id)">Editar</button></td>
+                            <td><button type="button" class="btn btn-danger" onclick="Excluir(@item.id)">Excluir</button></td>
+                            <td style="vertical-align:middle">@item.id</td>
+                            <td style="vertical-align:middle">@item.data</td>
+                            <td style="vertical-align:middle">@item.total</td>
+                            <td style="vertical-align:middle">@item.vendedor_id</td>
+                            <td style="vertical-align:middle">@item.cliente_id</td>
+                        </tr>
+                    }
+
+                }
+                catch { }
+            }
+
+        </tbody>
+    </table>
+</div>

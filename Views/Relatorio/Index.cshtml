@@ -1,0 +1,13 @@
+﻿<h2>Relatórios do Sistema</h2>
+
+<button class="btn btn-block btn-primary" type="button" onclick="vendas('Vendas')">Vendas por Periodo</button>
+<button class="btn btn-block btn-warning" type="button" onclick="vendas('Comissao')">Comissão de Vendedores</button>
+<button class="btn btn-block btn-success" type="button" onclick="vendas('Grafico')">Grafico de Vendas</button>
+<br /><br />
+<script>
+    function vendas(action) {
+
+        window.location.href = "../Relatorio/" + action;
+    }
+
+</script>

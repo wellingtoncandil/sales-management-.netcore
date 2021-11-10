@@ -1,0 +1,70 @@
+﻿
+<h2>Lista de Produtos</h2>
+
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="~/lib/jquery/dist/jquery.js"></script>
+<script type="text/javascript" src="~/js/site.js"></script>
+<br />
+
+<!--campo de pesquisa-->
+<div id="pesquisa">
+    Nome do Produto :
+    <input type="text" id="pesquisa" />
+    <img src="~/images/lupa.jpg" width="45" height="45" />
+</div>
+<br />
+
+<div style="overflow-y:scroll">
+    <table class="table table-dark" style="margin-top:auto">
+        <thread>
+            <tr>
+                <td style="vertical-align:middle">#</td>
+                <td style="vertical-align:middle">#</td>
+                <td>ID</td>
+                <td>Nome</td>
+                <td>Descrição</td>
+                <td>Preço Unitário</td>
+                <td>Unidade Medida</td>
+                <td>Foto</td>
+            </tr>
+        </thread>
+        <tbody id="tabela">
+            <!-- id necessário para pesquisa na tabela sem que interfira no cabeçalho -->
+
+            @{
+                //ao percorrer a ViewBag.ListaClientes, é necessário fazer um cast dos dados para o tipo
+                //List<ClienteModel>
+                foreach (var item in (List<ProdutoModel>)ViewBag.ListaProdutos)
+                {
+                    <tr>
+                        <!--onclick chama a função js passando o paramentro item.id-->
+                        <td style="vertical-align:middle"><button type="button" class="btn btn-warning" onclick="Editar(@item.id)">Editar</button></td>
+                        <td style="vertical-align:middle"><button type="button" class="btn btn-danger" onclick="Excluir(@item.id)">Excluir</button></td>
+                        <td style="vertical-align:middle">@item.id</td>
+                        <td style="vertical-align:middle">@item.nome</td>
+                        <td style="vertical-align:middle">@item.descricao</td>
+                        <td style="vertical-align:middle">@item.preco_unitario</td>
+                        <td style="vertical-align:middle">@item.unidade_medida</td>
+                        <td style="vertical-align:middle"><img src="@item.link_foto" width="100" height="100" /></td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+<br />
+<button class="btn btn-block btn-primary" type="button" onclick="cadastrar()">Cadastrar Produto</button>
+<script>
+    function cadastrar() {
+
+        window.location.href = "../Produto/Cadastro"
+    }
+
+    function Editar(id) {
+        window.location.href = "../Produto/Cadastro/" + id;
+    }
+
+    function Excluir(id) {
+        window.location.href = "../Produto/Excluir/" + id;
+    }
+</script>

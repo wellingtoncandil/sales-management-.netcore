@@ -1,0 +1,74 @@
+﻿<h2>Listagem de Vendas</h2>
+
+<style type="text/css">
+    .center {
+        vertical-align: middle;
+    }
+    table {
+        TABLE-LAYOUT: fixed;
+        margin-top: auto;
+        height: 100px;
+    }
+</style>
+
+<br />
+
+<!--campo de pesquisa-->
+<div id="pesquisa">
+    Nome do Cliente :
+    <input type="text" id="pesquisa" />
+    <img src="~/images/lupa.jpg" width="45" height="45" />
+</div>
+<br />
+
+<div>
+    <table class="table table-dark">
+        <thread>
+            <tr>
+                <td></td>
+                <td>Nº da Venda</td>
+                <td>Data</td>
+                <td>Cliente</td>
+                <td>Vendedor</td>
+                <td>Valor Total</td>
+            </tr>
+        </thread>
+        <tbody id="tabela">
+
+            @{
+                //ao percorrer a ViewBag.ListaClientes, é necessário fazer um cast dos dados para o tipo
+                //List<ClienteModel>
+                foreach (var item in (List<VendaModel>)ViewBag.ListaVendas)
+                {
+                    <tr>
+                        <!--onclick chama a função js passando o paramentro item.id-->
+                        <td><button type="button" class="btn btn-primary" onclick="Visualizar(@item.id)">Visualizar</button></td>
+                        <td style="vertical-align:middle">@item.id</td>
+                        <td style="vertical-align:middle">@item.data</td>
+                        <td style="vertical-align:middle">@item.cliente_id</td>
+                        <td style="vertical-align:middle">@item.vendedor_id</td>
+                        <td style="vertical-align:middle">@item.total</td>
+
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+<br />
+<button class="btn btn-block btn-primary" type="button" onclick="cadastrar()">Registrar Venda</button>
+<script>
+    function cadastrar() {
+
+        window.location.href = "../Venda/Registrar"
+    }
+
+    function Visualizar(id) {
+        window.location.href = "../Venda/VisualizarVenda/" + id;
+    }
+
+    function Excluir(id) {
+        window.location.href = "../Venda/Excluir/" + id;
+    }
+
+</script>

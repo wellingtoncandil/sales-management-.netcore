@@ -1,0 +1,90 @@
+﻿@model ProdutoModel
+
+<h3>Detalhe do Produto</h3>
+<script src="~/js/site.js"></script>
+<form asp-controller="Produto" asp-action="Cadastro">
+    <input type="hidden" asp-for="id" value="@try{@ViewBag.Produto.id} catch{ }" readonly/>
+
+    <div class="form-group">
+        <label>Nome</label>
+        <input asp-for="nome" type="text" class="form-control" value="@try{@ViewBag.Produto.nome} catch { }" readonly />
+        <!--validação do preenchimento, caso não preenchido, aparecerá mensagem de erro-->
+        <span asp-validation-for="nome" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label>Descrição</label>
+        <!-- ajustando o text area-->
+        @{
+            var vdescricao = "";
+
+            try
+            {
+                vdescricao = @ViewBag.Produto.descricao;
+            }
+            catch { }
+        }
+
+        @Html.TextArea("descricao", vdescricao, new { @class = "form-control" })
+
+        @*<input asp-for="descricao" type="text" class="form-control" value="@try{@ViewBag.Produto.descricao} catch { }" />*@
+        <span asp-validation-for="descricao" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label>Preço Unitário</label>
+        <input asp-for="preco_unitario" type="text" class="form-control" value="@try{@ViewBag.Produto.preco_unitario} catch { }" readonly/>
+        <span asp-validation-for="preco_unitario" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label>Quantidade Estoque</label>
+        <input asp-for="quantidade_estoque" type="text" class="form-control" value="@try{@ViewBag.Produto.quantidade_estoque} catch { }" readonly/>
+        <span asp-validation-for=" quantidade_estoque" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label>Unidade de Medida</label>
+        @*<input asp-for="unidade_medida" type="text" class="form-control" value="@try{@ViewBag.Produto.unidade_medida} catch { }" />*@
+
+        @{
+            var vUnidadeMedida = "";
+            try
+            {
+                vUnidadeMedida = ViewBag.Produto.unidade_medida;
+            }
+            catch { }
+        }
+        <select asp-for="unidade_medida" class="form-control">
+            @{
+                if (vUnidadeMedida != null)
+                {
+                    <option value="@vUnidadeMedida" selected>@vUnidadeMedida</option>
+                }
+            }
+            <option value="un">un</option>
+            <option value="mt">mt</option>
+            <option value="kg">kg</option>
+            <option value="lt">lt</option>
+            <option value="ton">ton</option>
+        </select>
+
+        <span asp-validation-for="unidade_medida" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label>Foto</label>
+        <input asp-for="link_foto" type="text" class="form-control" value="@try{@ViewBag.Produto.link_foto} catch { }" readonly/>
+        <span asp-validation-for="link_foto" class="text-danger"></span>
+    </div>
+    <div>
+        @try
+        {
+            <img src="@try {@ViewBag.Produto.link_foto} catch { }" width="100" height="100" />
+        }
+        catch { }
+    </div>
+    <br />
+</form>
+<br />
+<button type="button" class="btn btn-block btn-primary" onclick="voltar()">Listagem de Produtos</button>
+<script>
+    function voltar() {
+        window.location.href = '../../Estoque/Index';
+    };
+</script>

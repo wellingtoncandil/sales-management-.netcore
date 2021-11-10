@@ -1,0 +1,26 @@
+﻿@model VendedorModel
+
+<h3>Cadastro de Vendedores</h3>
+
+<form asp-controller="Vendedor" asp-action="Cadastro">
+    <input type="hidden" asp-for="id" value="@try{@ViewBag.Vendedor.id} catch{ }" />
+
+    <div class="form-group">
+        <label>Nome</label>
+        <input asp-for="nome" type="text" class="form-control" value="@try{@ViewBag.Vendedor.nome} catch { }" />
+        <!--validação do preenchimento, caso não preenchido, aparecerá mensagem de erro-->
+        <span asp-validation-for="nome" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label>Email</label>
+        <input asp-for="email" type="text" class="form-control" value="@try{@ViewBag.Vendedor.email} catch { }" />
+        <span asp-validation-for="email" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label>Senha</label>
+        <input asp-for="senha" type="text" class="form-control" value="@try{@ViewBag.Vendedor.senha} catch { }" />
+        <span asp-validation-for="senha" class="text-danger"></span>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-block btn-success">Registrar</button>
+</form>
